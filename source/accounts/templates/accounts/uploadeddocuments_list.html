@@ -1,0 +1,93 @@
+{% extends 'layouts/default/page.html' %}
+
+{% load bootstrap4 %}
+{% load i18n %}
+{% load static %}
+{% block content %}
+
+<center>
+<h4>{% trans 'Uploaded Files' %}</h4>
+{% csrf_token %}
+
+
+
+{% block pagination %}
+
+<form action="{% url 'accounts:shared_files_crypto' %}">
+
+            <input type="hidden" name="fileid" value="{{ doc.id }}">
+            <input type="submit" class="btn btn-primary" value="View Files Shared">
+        </form>
+    <br>
+{% if uploadeddocuments_list %}
+<table class="table table-hover table-striped table-dark">
+    <tr>
+        <th>ID</th>
+        <th>File Name</th>
+        <th>Created On</th>
+        <th>Download</th>
+        <th>Delete</th>
+        <th>Share</th>
+    </tr>
+
+    {% for doc in uploadeddocuments_list %}
+    <tr>
+        <td>
+            {{ doc.id }}
+        </td>
+        <td>
+            {{ doc.name }}
+        </td>
+            <td>
+            {{ doc.created_at }}
+        </td>
+        <td>
+            <a href="{% url 'accounts:details' doc.id %}" class="btn btn-primary"><img src="{% static 'svg/data-transfer-download.svg'%}" width="32" height="32">Download</a>
+
+
+        </td>
+        <td>
+            <a href="{% url 'accounts:delete_crypto' doc.id %}" class="btn btn-warning"> <img src="{% static 'svg/circle-x.svg'%}" width="32" height="32" >Delete</a>
+
+        </td>   <td>
+        <form action="{% url 'accounts:get_users' %}" class="btn btn-primary">
+
+            <input type="hidden" name="fileid" value="{{ doc.id }}">
+             <img    src="{% static 'svg/share.svg'%}" width="32" height="32">
+            <input type="submit" class="btn btn-primary" value="Share">
+
+        </form>
+
+        </td>
+    </tr>
+
+
+
+
+    {% endfor %}
+</table>
+
+{% else %}
+<p>No Files are available.</p>
+
+{% endif %}
+{% if is_paginated %}
+<center>
+
+    <div>
+      <span class="page-links">
+ {% if page_obj.has_previous %}
+          <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}" class="btn btn-primary">Previous</a>
+        {% endif %}
+        <span class="page-current">
+          <p>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</p >
+        </span>
+        {% if page_obj.has_next %}
+          <a href="{{ request.path }}?page={{ page_obj.next_page_number }}" class="btn btn-primary">Next</a>
+        {% endif %}
+      </span>
+</div>
+{% endif %}
+{% endblock%}
+    </center>
+{% endblock %}

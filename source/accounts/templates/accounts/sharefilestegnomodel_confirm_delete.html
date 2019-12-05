@@ -1,0 +1,12 @@
+{% extends 'layouts/default/page.html' %}
+
+{% load bootstrap4 %}
+{% load i18n %}
+
+{% block content %}
+<center><form method="post">{% csrf_token %}
+    <h2>Are you sure you want to delete this Share <strong>{{ object.file_id.name }}</strong>?</h2>
+    <input type="submit" value="Confirm" class="btn btn-danger">
+</form>
+</center>
+{% endblock%}
